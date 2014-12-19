@@ -1,14 +1,14 @@
 package io.prediction.recommendation.social
 
 import scala.collection.immutable.HashMap
+
 import org.apache.spark.rdd.RDD
-import org.apache.spark.streaming.DStream
 
 class TrainingData (
-  val userProfiles : RDD[(Int, Features)],
-  val userInteractions : RDD[((Int, Int), Interactions)],
-  val trainingRecord : DStream[TrainingRecord],
-  val sourceProfiles : RDD[(Int, Features)]
+  val userProfiles: RDD[(Int, Features)],
+  val userInteractions: RDD[((Int, (Int, Interactions)],
+  val sourceProfiles: RDD[(Int, Features)],
+  val trainingRecords: RDD[TrainingRecord]
 ) extends Serializable
 
 case class Features (
@@ -18,21 +18,21 @@ case class Features (
     the same or different
     eg gender
   */
-  val cfList : List[Int],
+  val cfList: List[Int],
   /*
     numerical features
     similarity is
     based on the difference
     eg age
   */
-  val nfList : List[Double],
+  val nfList: List[Double],
   /*
     list features
     similarity is
     based on the overlap
     eg keywords
   */
-  val lfList : List[List[HashMap[Int, Double]]]
+  val lfList: List[HashMap[Int, Double]]
 ) extends Serializable
 
 case class Interactions (
@@ -41,23 +41,23 @@ case class Interactions (
     where the category matters
     eg following
   */
-  val ciList : List[Int],
+  val ciList: List[Int],
   /*
     numerical interactions
     where the count matters
     eg number of retweeting
   */
-  val niList : List[Double]
+  val niList: List[Double]
 ) extends Serializable
 
 case class TrainingRecord (
-  val fromId : Int,
-  val toId : Int,
-  val result : Boolean,
+  val fromId: Int,
+  val toId: Int,
+  val result: Int,
   /*
     extra information of a record
     that can be used to weight the record
   */
-  val ceList : List[Int],
-  val neList : List[Double]
+  val ceList: List[Int],
+  val neList: List[Double]
 ) extends Serializable
