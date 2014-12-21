@@ -19,13 +19,18 @@ class DataSource(val dsp: DataSourceParams)
 
   @transient lazy val logger = Logger[this.type]
 
+  val defaultBirthYear = 1992
+
   override
   def readTraining(sc: SparkContext): TrainingData = {
     val userBasics = sc.textFile(dsp.userProfileFile).map {
       line =>
       val data = line.split("\\t")
       val id = data(0).toInt
-      val birthYear = data(1).toInt
+      var birthYear = defaultBirthYear
+      if (!data(1).contains("-")) {
+        val birthYear = data(1).toInt
+      }
       val gender = data(2).toInt
       val numTweet = data(3).toInt
       var tags = HashMap[Int, Double]()
